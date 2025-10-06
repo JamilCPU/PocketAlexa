@@ -1,20 +1,21 @@
 import asyncio
 import websockets
-
+from Executor import Executor
 # Set of connected clients
 connected_clients = set()
 
 # Function to handle each client connection
 async def handle_client(websocket):
+    execute = Executor()
+
     # Add the new client to the set of connected clients
     connected_clients.add(websocket)
     try:
-        # Listen for messages from the client
+        print(websocket)
         async for message in websocket:
             # Broadcast the message to all other connected clients
-            for client in connected_clients:
-                if client != websocket:
-                    await client.send(message)
+            print(message)
+            execute.executeCommand(message)
     except websockets.exceptions.ConnectionClosed:
         pass
     finally:

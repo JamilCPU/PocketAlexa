@@ -2,37 +2,33 @@ import pyautogui
 import ctypes
 import pycaw
 import time
+import os
 
-class Executor:
-    commands = {'open Notepad' : '',
-                'lock screen' : '',
-                'play media' : '',
-                'pause media' : '',}
+class Executor:    
+    def executeCommand(self, command):
+        commands = {'open Notepad' : self.openNotepad,
+        'lock screen' : self.lockScreen,
+        'play media' : self.playMedia,
+        'pause media' : self.pauseMedia}
+        if command not in commands:
+            return "CRITICAL FAILURE"
 
-    def validateCommand(command):
-        return True
-    
-    def executeCommand(command):
-        resp = commands[command]
+        print('Executing command... ', command)
+        resp = commands[command]()
 
     def openNotepad(self):
-        import os
         os.system('notepad')
-        print('Notepad opened')
+        return 'Notepad opened'
     
     def lockScreen(self):
         ctypes.windll.user32.LockWorkStation()
-        print('Screen Lock Attempted')
+        return 'Screen Lock Attempted'
     def playMedia(self):
-
+        time.sleep(5)
         pyautogui.press('space')
-        print('Playing active media')
+        return 'Playing active media'
 
     def pauseMedia(self):
+        time.sleep(5)
         pyautogui.press('space')
-        print('Pausing active media')
-
-    
-execute = Executor()
-#execute.lockScreen()
-execute.openNotepad()
+        return 'Pausing active media'
