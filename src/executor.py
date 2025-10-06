@@ -1,5 +1,7 @@
 import pyautogui
 import ctypes
+import pycaw
+import time
 
 class Executor:
     commands = {'open Notepad' : '',
@@ -14,17 +16,23 @@ class Executor:
         resp = commands[command]
 
     def openNotepad(self):
-        return ""
+        import os
+        os.system('notepad')
+        print('Notepad opened')
     
     def lockScreen(self):
         ctypes.windll.user32.LockWorkStation()
         print('Screen Lock Attempted')
     def playMedia(self):
-        return ""
+
+        pyautogui.press('space')
+        print('Playing active media')
 
     def pauseMedia(self):
-        return ""
+        pyautogui.press('space')
+        print('Pausing active media')
 
     
 execute = Executor()
-execute.lockScreen()
+#execute.lockScreen()
+execute.openNotepad()
