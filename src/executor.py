@@ -6,7 +6,7 @@ import os
 
 class Executor:    
     def executeCommand(self, command):
-        commands = {'open Notepad' : self.openNotepad,
+        commands = {'open notepad' : self.openNotepad,
         'lock screen' : self.lockScreen,
         'play media' : self.playMedia,
         'pause media' : self.pauseMedia}
@@ -24,11 +24,11 @@ class Executor:
         ctypes.windll.user32.LockWorkStation()
         return 'Screen Lock Attempted'
     def playMedia(self):
-        time.sleep(5)
+        time.sleep(1.5)
         pyautogui.press('space')
         return 'Playing active media'
 
     def pauseMedia(self):
-        time.sleep(5)
+        time.sleep(1.5)
         pyautogui.press('space')
         return 'Pausing active media'

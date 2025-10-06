@@ -1,12 +1,18 @@
 import asyncio
 import websockets
+
 from Executor import Executor
-# Set of connected clients
+from FileLogger import FileLogger
+
 connected_clients = set()
 
-# Function to handle each client connection
 async def handle_client(websocket):
     execute = Executor()
+    file = FileLogger()
+    try:
+        file.setupLogging()
+    except FileExistsError:
+        pass
 
     # Add the new client to the set of connected clients
     connected_clients.add(websocket)
@@ -14,7 +20,7 @@ async def handle_client(websocket):
         print(websocket)
         async for message in websocket:
             # Broadcast the message to all other connected clients
-            print(message)
+            file.writeToFile("Message Received: " + message)
             execute.executeCommand(message)
     except websockets.exceptions.ConnectionClosed:
         pass
