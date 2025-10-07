@@ -18,6 +18,10 @@ class Executor:
         resp = commands[command]()
         return resp
 
+    def openApplicationWithAi(self, command):
+        subprocess.Popen(command)
+        return "SUCCESS: Opened " + command
+
     def openNotepad(self):
         subprocess.Popen('notepad')
         return "SUCCESS: Opened Notepad"
