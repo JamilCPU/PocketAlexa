@@ -21,15 +21,15 @@ async def handle_client(websocket):
         print(websocket)
         async for message in websocket:
             file.writeToFile("Message Received: " + message)
-            #try:
-            result = execute.executeCommand(message)
-            print(result)
-            await websocket.send(result)
 
-            print('result: ', result)
-            #except Exception as e:
+            try:
+                result = execute.executeCommand(message)
+                print(result)
+                await websocket.send(result)
+                print('result: ', result)
+            except Exception as e:
                 #file.writeToFile(traceback.format_exc())
-                #traceback.print_exc()
+                traceback.print_exc()
     except websockets.exceptions.ConnectionClosed:
         pass
     except Exception as e:

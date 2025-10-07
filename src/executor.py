@@ -3,6 +3,7 @@ import ctypes
 import pycaw
 import time
 import os
+import subprocess
 
 class Executor:    
     def executeCommand(self, command):
@@ -11,7 +12,7 @@ class Executor:
         'play media' : self.playMedia,
         'pause media' : self.pauseMedia}
         if command not in commands:
-            return "CRITICAL FAILURE"
+            return "EXECUTION ERROR\n 404 Not Found: '", command, "'"
 
         print('Executing command... ', command)
         resp = commands[command]()
@@ -19,7 +20,8 @@ class Executor:
         return resp
 
     def openNotepad(self):
-        os.system('notepad')
+        subprocess.Popen('notepad')
+        print('notepad opened... returning statement')
         return "Opened notepad"
     
     def lockScreen(self):
