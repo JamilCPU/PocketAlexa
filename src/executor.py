@@ -15,10 +15,12 @@ class Executor:
 
         print('Executing command... ', command)
         resp = commands[command]()
+        print(resp)
+        return resp
 
     def openNotepad(self):
         os.system('notepad')
-        return 'Notepad opened'
+        return "Opened notepad"
     
     def lockScreen(self):
         ctypes.windll.user32.LockWorkStation()
