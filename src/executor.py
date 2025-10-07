@@ -12,7 +12,7 @@ class Executor:
         'play media' : self.playPauseMedia,
         'pause media' : self.playPauseMedia}
         if command not in commands:
-            return "EXECUTION ERROR\n 404 Not Found: '", command, "'"
+            return "EXECUTION ERROR: 404 Command Not Found: '", command, "'"
 
         print("Executing command... '", command, "'")
         resp = commands[command]()

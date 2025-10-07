@@ -9,7 +9,6 @@ connected_clients = set()
 
 file = FileLogger()
 file.setupLogging()
-file.wipeLog()
 
 async def handle_client(websocket):
     execute = Executor()
@@ -19,16 +18,15 @@ async def handle_client(websocket):
     try:
         print(websocket)
         async for message in websocket:
-            file.writeToFile("Message Received: " + message)
-
+            file.writeToFile("Message Received from CLIENT: '" + message + "'")
             try:
                 result = execute.executeCommand(message)
-                file.writeToFile("EXECUTION RESPONSE\n" + message + "\n")
+                file.writeToFile("Response from EXECUTOR: '" + message + "'")
                 await websocket.send(result)
-                print('result: ', result)
             except Exception as e:
-                #file.writeToFile(traceback.format_exc())
+                file.writeToFile(traceback.format_exc())
                 traceback.print_exc()
+                system.exit(-1)
     except websockets.exceptions.ConnectionClosed:
         pass
     except Exception as e:
