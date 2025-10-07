@@ -10,3 +10,7 @@ class FileLogger:
         with open("../logs/logging.txt", 'a') as f:
             f.write("[" + timestamp + "]: " + info  + "\n")
 
+    def wipeLog(self):
+        with open("../logs/logging.txt", 'w') as f:
+            f.write("Logging: START\n")
+        print('wipe log ran')

@@ -1,5 +1,6 @@
 import asyncio
 import websockets
+import traceback
 
 from Executor import Executor
 from FileLogger import FileLogger
@@ -7,10 +8,8 @@ from FileLogger import FileLogger
 connected_clients = set()
 
 file = FileLogger()
-try:
-    file.setupLogging()
-except FileExistsError:
-    pass
+file.setupLogging()
+file.wipeLog()
 
 async def handle_client(websocket):
     execute = Executor()
@@ -24,7 +23,7 @@ async def handle_client(websocket):
 
             try:
                 result = execute.executeCommand(message)
-                print(result)
+                file.writeToFile("EXECUTION RESPONSE\n" + message + "\n")
                 await websocket.send(result)
                 print('result: ', result)
             except Exception as e:

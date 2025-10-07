@@ -20,7 +20,6 @@ class Executor:
 
     def openNotepad(self):
         subprocess.Popen('notepad')
-        print('notepad opened... returning statement')
         return "SUCCESS: Opened Notepad"
     
     def lockScreen(self):
