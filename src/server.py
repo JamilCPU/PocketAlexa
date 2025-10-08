@@ -3,7 +3,7 @@ import websockets
 import traceback
 
 from Executor import Executor
-from FileLogger import FileLogger
+from Utilities.FileLogger import FileLogger
 
 connected_clients = set()
 

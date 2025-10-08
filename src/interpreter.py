@@ -1,4 +1,4 @@
-class sttRecognition:
+class Interpreter:
 
     def parseSpeech(speechFromClient):
         return ""
