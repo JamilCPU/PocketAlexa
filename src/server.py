@@ -5,10 +5,15 @@ import traceback
 from Executor import Executor
 from Utilities.FileLogger import FileLogger
 
+from Utilities.DownloadModel import ModelDownloader
+
 connected_clients = set()
 
 file = FileLogger()
 file.setupLogging()
+
+modelDownloader = ModelDownloader()
+modelDownloader.routineSetupModel()
 
 async def handle_client(websocket):
     execute = Executor()
