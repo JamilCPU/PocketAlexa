@@ -8,7 +8,7 @@ async def chat():
             message = input("Enter message: ")
             await websocket.send(message)
             response = await websocket.recv()
-            print(f"Received: {response}")f
+            print(f"Received: {response}")
 
 # Run the client
 if __name__ == "__main__":
