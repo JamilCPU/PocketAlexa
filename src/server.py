@@ -37,10 +37,8 @@ async def handle_client(websocket):
     except Exception as e:
         print(f"Connection error: {e}")
     finally:
-        # Remove the client from the set of connected clients
         connected_clients.remove(websocket)
 
-# Main function to start the WebSocket server
 async def main():
     server = await websockets.serve(handle_client, 'localhost', 12345)
     await server.wait_closed()
