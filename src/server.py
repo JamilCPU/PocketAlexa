@@ -24,14 +24,12 @@ async def handle_client(websocket):
     try:
         print(websocket)
         async for message in websocket:
-            file.writeToFile("Message Received from CLIENT: '" + message + "'")
             try:
                 if isinstance(message, bytes):
-                    result = interpet.parseSpeech(message)
-                    print(result)
-                    print('DOING NOTHING')
-                else:
-                    result = execute.executeCommand(message)
+                    file.writeToFile("Audio Message received from CLIENT: 'PARSING'")
+                    message = interpret.parseSpeech(message)
+                file.writeToFile("Message Received from CLIENT: '" + message + "'")
+                result = execute.executeCommand(message)
                 file.writeToFile("Response from EXECUTOR: '" + message + "'")
                 await websocket.send(result)
             except Exception as e:

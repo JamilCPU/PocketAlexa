@@ -5,12 +5,12 @@ class Interpreter:
     def __init__(self):
         voskModel = os.path.join("../models/vosk-model-small-en-us-0.15")
         self.vosk = Model(voskModel)
-        self.recognizer = KaldiRecognizer(self.model, 16000)
-        self.recognizer.SetWords(true)
+        self.recognizer = KaldiRecognizer(self.vosk, 16000)
+        self.recognizer.SetWords(True)
 
-    def parseSpeech(speechFromClient):
+    def parseSpeech(self, speechFromClient):
         try:
-            if self.recognizer.AcceptWaveform(audio_data):
+            if self.recognizer.AcceptWaveform(speechFromClient):
                 result = json.loads(self.recognizer.Result())
                 return result.get('text', '').strip()
             else:
