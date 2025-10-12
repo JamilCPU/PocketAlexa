@@ -3,6 +3,7 @@ import websockets
 import traceback
 
 from Executor import Executor
+from Interpreter import Interpreter
 from Utilities.FileLogger import FileLogger
 
 from Utilities.DownloadModel import ModelDownloader
@@ -17,7 +18,7 @@ modelDownloader.routineSetupModel()
 
 async def handle_client(websocket):
     execute = Executor()
-
+    interpret = Interpreter()
 
     connected_clients.add(websocket)
     try:
@@ -25,7 +26,12 @@ async def handle_client(websocket):
         async for message in websocket:
             file.writeToFile("Message Received from CLIENT: '" + message + "'")
             try:
-                result = execute.executeCommand(message)
+                if isinstance(message, bytes):
+                    result = interpet.parseSpeech(message)
+                    print(result)
+                    print('DOING NOTHING')
+                else:
+                    result = execute.executeCommand(message)
                 file.writeToFile("Response from EXECUTOR: '" + message + "'")
                 await websocket.send(result)
             except Exception as e:
