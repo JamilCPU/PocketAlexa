@@ -47,6 +47,5 @@ async def main():
     server = await websockets.serve(handle_client, 'localhost', 12345)
     await server.wait_closed()
 
-# Run the server
 if __name__ == "__main__":
     asyncio.run(main())

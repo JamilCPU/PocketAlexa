@@ -19,7 +19,7 @@ class AudioRecorder:
         self.CHUNK = 1024
         self.FORMAT = pyaudio.paInt16
         self.CHANNELS = 1
-        self.RATE = 16000  # Must match Vosk model rate
+        self.RATE = 16000
     
     def start_recording(self):
         """Start recording audio from microphone"""

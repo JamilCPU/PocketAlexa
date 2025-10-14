@@ -2,7 +2,6 @@ import asyncio
 import websockets
 from Utilities.AudioRecorder import AudioRecorder
 
-# Function to handle the chat client
 async def chat():
     async with websockets.connect('ws://localhost:12345') as websocket:
         mode = input("Enter 'audio' or 'text'")
@@ -22,6 +21,5 @@ async def chat():
             response = await websocket.recv()
             print(f"Received: {response}")
 
-# Run the client
 if __name__ == "__main__":
     asyncio.run(chat())
