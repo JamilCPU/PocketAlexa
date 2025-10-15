@@ -4,8 +4,8 @@ import traceback
 
 from Executor import Executor
 from Interpreter import Interpreter
+from Autocorrect import Autocorrect
 from Utilities.FileLogger import FileLogger
-
 from Utilities.DownloadModel import ModelDownloader
 
 connected_clients = set()
@@ -19,7 +19,7 @@ modelDownloader.routineSetupModel()
 async def handle_client(websocket):
     execute = Executor()
     interpret = Interpreter()
-
+    autocorrect = Autocorrect()
     connected_clients.add(websocket)
     try:
         print(websocket)
