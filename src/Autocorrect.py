@@ -10,7 +10,13 @@ class Autocorrect:
             self.commandRegistry = CommandRegistry()
 
     def correctCommand(self, command):
-        correctedCommand = command
-        ##call the ai model and prompt it
-        ##the model needs context of the command's functionality
-        #to that end, perhaps autocorrect should import executor?
+        prompt = ""
+        with open('Utilities/AutocorrectPrompt.txt', 'r') as file:
+            prompt = file.read()
+        prompt = prompt + command
+        
+        #make call to ai model with prmopt
+        
+        #validate returned value and return back to the server
+       
+    
