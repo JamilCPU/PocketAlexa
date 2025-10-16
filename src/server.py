@@ -14,7 +14,8 @@ file = FileLogger()
 file.setupLogging()
 
 modelDownloader = ModelDownloader()
-modelDownloader.routineSetupModel()
+# Setup both Vosk and LLM models
+voskSuccess, llmSuccess = modelDownloader.setupAllModels()
 
 async def handle_client(websocket):
     execute = Executor()
@@ -29,8 +30,13 @@ async def handle_client(websocket):
                     file.writeToFile("Audio Message received from CLIENT: 'PARSING'")
                     message = interpret.parseSpeech(message)
                 file.writeToFile("Message Received from CLIENT: '" + message + "'")
-                result = execute.executeCommand(message)
-                file.writeToFile("Response from EXECUTOR: '" + message + "'")
+                
+                # Apply autocorrect to the message
+                correctedMessage = autocorrect.correctCommand(message)
+                file.writeToFile("Autocorrected Message: '" + correctedMessage + "'")
+                
+                result = execute.executeCommand(correctedMessage)
+                file.writeToFile("Response from EXECUTOR: '" + result + "'")
                 await websocket.send(result)
             except Exception as e:
                 file.writeToFile(traceback.format_exc())
