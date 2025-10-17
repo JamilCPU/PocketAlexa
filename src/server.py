@@ -7,6 +7,7 @@ from Interpreter import Interpreter
 from Autocorrect import Autocorrect
 from Utilities.FileLogger import FileLogger
 from Utilities.DownloadModel import ModelDownloader
+from Utilities.ApplicationRegistry import ApplicationRegistry
 
 connected_clients = set()
 
@@ -14,13 +15,15 @@ file = FileLogger()
 file.setupLogging()
 
 modelDownloader = ModelDownloader()
-# Setup both Vosk and LLM models
 voskSuccess, llmSuccess = modelDownloader.setupAllModels()
 
+detectApps = ApplicationRegistry()
+detectApps.detectInstalledApplications()
+execute = Executor()
+interpret = Interpreter()
+autocorrect = Autocorrect()
 async def handle_client(websocket):
-    execute = Executor()
-    interpret = Interpreter()
-    autocorrect = Autocorrect()
+
     connected_clients.add(websocket)
     try:
         print(websocket)
