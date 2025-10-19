@@ -15,14 +15,17 @@ class ApplicationRegistry:
             capture_output=True,
             text=True
         )
-        if response:
-            self.recordInstalledApplications(response)
+        if response:            
+            self.recordInstalledApplications(response.stdout)
         else:
             print('failed to detect installed applications..?')
+
     def recordInstalledApplications(self, powershellResponse):
-        print(powershellResponse)
-        for appInfo in powershellResponse:
-            if appInfo.strip():
-                appInfo = appInfo.split()
-                if appInfo:
-                    self.apps.append(appInfo[0])#Add the application name to our list of apps
+            print('stripped')
+            #print(powershellResponse.strip())
+            filteredResponse = powershellResponse.strip()
+            filteredResponse = powershellResponse.split('\n')
+            print(filteredResponse)
+
+
+            #self.apps.append(appInfo[0])#Add the application name to our list of apps
