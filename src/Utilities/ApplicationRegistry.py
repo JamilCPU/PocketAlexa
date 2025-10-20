@@ -21,11 +21,10 @@ class ApplicationRegistry:
             print('failed to detect installed applications..?')
 
     def recordInstalledApplications(self, powershellResponse):
-            print('stripped')
-            #print(powershellResponse.strip())
             filteredResponse = powershellResponse.strip()
-            filteredResponse = powershellResponse.split('\n')
-            print(filteredResponse)
+            lines = powershellResponse.split('\n')
 
-
-            #self.apps.append(appInfo[0])#Add the application name to our list of apps
+            for line in lines:
+                if line.strip():
+                    parts = [part for part in line.split('  ') if part.strip()]
+                    self.apps.append(parts[0])
