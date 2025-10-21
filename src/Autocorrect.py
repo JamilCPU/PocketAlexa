@@ -1,11 +1,15 @@
 from CommandRegistry import CommandRegistry
 from Utilities.ModelOptimizer import ModelOptimizer
+from Utilities.ApplicationRegistry import ApplicationRegistry
+
 import os
 
 class Autocorrect:
     #responsible for taking the interpreted speech and autocorrecting it into
 
+
     def __init__(self, commandRegistry=None):
+        self.appRegistry = ApplicationRegistry()
         if commandRegistry:
             self.commandRegistry = commandRegistry
         else:

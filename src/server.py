@@ -7,7 +7,7 @@ from Interpreter import Interpreter
 from Autocorrect import Autocorrect
 from Utilities.FileLogger import FileLogger
 from Utilities.DownloadModel import ModelDownloader
-from Utilities.ApplicationRegistry import ApplicationRegistry
+
 
 connected_clients = set()
 
@@ -17,8 +17,6 @@ file.setupLogging()
 modelDownloader = ModelDownloader()
 voskSuccess, llmSuccess = modelDownloader.setupAllModels()
 
-detectApps = ApplicationRegistry()
-detectApps.detectInstalledApplications()
 execute = Executor()
 interpret = Interpreter()
 autocorrect = Autocorrect()

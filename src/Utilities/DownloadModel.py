@@ -12,13 +12,12 @@ class ModelDownloader:
         self.model_name = "vosk-model-small-en-us-0.15"
         self.zip_filename = "model.zip"
         
-        # LLM model configuration
         self.llmModelName = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
         self.llmCacheDir = os.path.join(os.path.expanduser("~"), ".cache", "huggingface", "transformers")
     
     def setupModelsDirectory(self):
         """Setup models directory"""
-        modelsPath = "../models"  # From src/ directory, go up one level to project root, then into models
+        modelsPath = "../models" 
 
         if not os.path.exists(modelsPath):
             os.makedirs(modelsPath)

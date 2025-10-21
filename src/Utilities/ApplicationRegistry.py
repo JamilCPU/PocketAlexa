@@ -4,6 +4,7 @@ import os
 class ApplicationRegistry:
     def __init__(self):
         self.apps = []
+        self.detectInstalledApplications()
 
     def detectInstalledApplications(self):
         currentDirectory = os.path.dirname(os.path.abspath(__file__))
