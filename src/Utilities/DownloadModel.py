@@ -105,11 +105,11 @@ class ModelDownloader:
                     sys.executable, "-m", "pip", "install", dep
                 ])
             
-            print("✅ LLM dependencies installed successfully!")
+            print(" LLM dependencies installed successfully!")
             return True
             
         except subprocess.CalledProcessError as e:
-            print(f"❌ Failed to install LLM dependencies: {e}")
+            print(f" Failed to install LLM dependencies: {e}")
             return False
     
     def downloadLlmModel(self):
@@ -133,21 +133,21 @@ class ModelDownloader:
             
             # Get model info
             totalParams = sum(p.numel() for p in model.parameters())
-            print(f"✅ LLM model downloaded successfully!")
-            print(f"📊 Model parameters: {totalParams:,}")
-            print(f"📁 Model cached at: {self.llmCacheDir}")
+            print(f" LLM model downloaded successfully!")
+            print(f" Model parameters: {totalParams:,}")
+            print(f" Model cached at: {self.llmCacheDir}")
             
             return True
             
         except ImportError:
-            print("❌ Transformers library not found. Installing dependencies first...")
+            print(" Transformers library not found. Installing dependencies first...")
             if self.installLlmDependencies():
                 return self.downloadLlmModel()  # Retry after installation
             else:
                 return False
                 
         except Exception as e:
-            print(f"❌ Failed to download LLM model: {e}")
+            print(f" Failed to download LLM model: {e}")
             return False
     
     def checkLlmAvailability(self):
@@ -163,12 +163,12 @@ class ModelDownloader:
             return True
             
         except Exception as e:
-            print(f"❌ LLM model not available: {e}")
+            print(f" LLM model not available: {e}")
             return False
     
     def setupAllModels(self):
         """Setup both Vosk and LLM models"""
-        print("🚀 Setting up all models...")
+        print(" Setting up all models...")
         print("=" * 50)
         
         # Setup Vosk model
@@ -177,16 +177,16 @@ class ModelDownloader:
         # Setup LLM model
         llmSuccess = self.downloadLlmModel()
         
-        print("\n📋 Setup Summary:")
-        print(f"Vosk Model: {'✅ Ready' if voskSuccess else '❌ Failed'}")
-        print(f"LLM Model: {'✅ Ready' if llmSuccess else '❌ Failed'}")
+        print("\n Setup Summary:")
+        print(f"Vosk Model: {' Ready' if voskSuccess else ' Failed'}")
+        print(f"LLM Model: {' Ready' if llmSuccess else ' Failed'}")
         
         if voskSuccess and llmSuccess:
-            print("\n🎉 All models ready! Autocorrect with LLM is available.")
+            print("n🎉 All models ready! Autocorrect with LLM is available.")
         elif voskSuccess:
-            print("\n⚠️  Vosk ready, but LLM failed. Autocorrect will use fallback mode.")
+            print("Vosk ready, but LLM failed. Autocorrect will use fallback mode.")
         else:
-            print("\n❌ Model setup failed.")
+            print("❌ Model setup failed.")
         
         return voskSuccess, llmSuccess
 
