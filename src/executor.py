@@ -11,16 +11,24 @@ class Executor:
         'lock screen' : self.lockScreen,
         'play media' : self.playPauseMedia,
         'pause media' : self.playPauseMedia}
+             
+        if "open " in command:
+            return self.openApplicationByName(command)
+
         if command not in commands:
             return "EXECUTION ERROR: 404 Command Not Found: '", command, "'"
 
         print("Executing command... '", command, "'")
-        resp = commands[command]()
-        return resp
+        
+        print('EXECUTING STANDARD COMMAND')
+        return commands[command]()
 
-    def openApplicationWithAi(self, command):
-        subprocess.Popen(command)
-        return "SUCCESS: Opened " + command
+    def openApplicationByName(self, command):
+        print(command)
+        application = command[5:]
+        print(application)
+        subprocess.Popen(application)
+        return "SUCCESS: Opened " + application
 
     def openNotepad(self):
         subprocess.Popen('notepad')
