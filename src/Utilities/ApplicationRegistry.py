@@ -28,4 +28,4 @@ class ApplicationRegistry:
             for line in lines:
                 if line.strip():
                     parts = [part for part in line.split('  ') if part.strip()]
-                    self.apps.append(parts[0])
+                    self.apps.append([parts[0], parts[len(parts)-1]])

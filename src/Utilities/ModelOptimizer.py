@@ -23,6 +23,7 @@ class ModelOptimizer:
             self.tokenizer = AutoTokenizer.from_pretrained(modelName)
             if self.tokenizer.pad_token is None:
                 self.tokenizer.pad_token = self.tokenizer.eos_token
+                self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
             
             # Load model with optimizations
             self.model = AutoModelForCausalLM.from_pretrained(
@@ -65,13 +66,19 @@ class ModelOptimizer:
                 padding=True
             )
             
+            # Ensure attention mask is created properly
+            if 'attention_mask' not in inputs:
+                # Create attention mask manually if not provided
+                inputs['attention_mask'] = (inputs['input_ids'] != self.tokenizer.pad_token_id).long()
+            
             # Move to device
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
             
             # Generate with optimizations
             with torch.no_grad():
                 outputs = self.model.generate(
-                    inputs.input_ids,
+                    inputs['input_ids'],
+                    attention_mask=inputs['attention_mask'],  # Explicitly pass attention mask
                     max_new_tokens=maxTokens,
                     temperature=temperature,
                     do_sample=True,
