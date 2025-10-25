@@ -93,10 +93,12 @@ class Autocorrect:
         """Validate and construct open command with detected application name"""
         # Get detected application names
         appNames = [app[0] for app in self.appRegistry.apps]  # app[0] is the application name
-        
+        print(response)
+        print(originalCommand)
+        print('validating open command')
         # Look for application names in the response
         for appName in appNames:
-            if appName.lower() in response.lower():
+            if appName.contains(originalCommand):
                 return f"open {appName.lower()}"
         
         # If no specific app found, return generic open command
