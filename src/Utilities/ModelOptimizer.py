@@ -13,9 +13,15 @@ class ModelOptimizer:
         self.model = None
         self.tokenizer = None
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.model_loaded = False  # Track if model is already loaded
     
     def loadOptimizedModel(self, modelName="TinyLlama/TinyLlama-1.1B-Chat-v1.0"):
         """Load model with optimizations for faster inference"""
+        # Check if model is already loaded
+        if self.model_loaded and self.model is not None and self.tokenizer is not None:
+            print("Model already loaded, skipping download and loading")
+            return True
+        
         try:
             print(f"Loading optimized model: {modelName}")
             
@@ -44,6 +50,8 @@ class ModelOptimizer:
                 except Exception as e:
                     print(f"Model compilation failed: {e}")
             
+            # Mark model as loaded
+            self.model_loaded = True
             print("Optimized model loaded successfully!")
             return True
             
@@ -107,5 +115,17 @@ class ModelOptimizer:
             "device": self.device,
             "totalParameters": totalParams,
             "trainableParameters": trainableParams,
-            "modelDtype": next(self.model.parameters()).dtype
+            "modelDtype": next(self.model.parameters()).dtype,
+            "modelLoaded": self.model_loaded
         }
+    
+    def isModelLoaded(self):
+        """Check if model is currently loaded"""
+        return self.model_loaded and self.model is not None and self.tokenizer is not None
+    
+    def resetModel(self):
+        """Reset model state (useful for testing or memory management)"""
+        self.model = None
+        self.tokenizer = None
+        self.model_loaded = False
+        print("Model state reset")

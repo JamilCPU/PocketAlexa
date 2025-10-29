@@ -98,11 +98,10 @@ class Autocorrect:
         print('validating open command')
         # Look for application names in the response
         for appName in appNames:
-            if appName.contains(originalCommand):
+            if appName in originalCommand:
                 return f"open {appName.lower()}"
         
-        # If no specific app found, return generic open command
-        return "open <application_name>"
+        return "ERROR validating open command"
     
     def _fallbackCorrect(self, command):
         """Fallback rule-based correction when LLM is not available"""
