@@ -120,6 +120,19 @@ class ModelDownloader:
             import transformers
             from transformers import AutoTokenizer, AutoModelForCausalLM
             
+            # First try to load from local cache only. If this fails then we'll download the model
+            try:
+                _ = AutoTokenizer.from_pretrained(self.llmModelName, local_files_only=True)
+                model = AutoModelForCausalLM.from_pretrained(self.llmModelName, local_files_only=True)
+                totalParams = sum(p.numel() for p in model.parameters())
+                print("LLM model already cached. Skipping download.")
+                print(f" Model parameters: {totalParams:,}")
+                print(f" Model cache: {self.llmCacheDir}")
+                return True
+            except Exception:
+                # Not in cache, proceed to download
+                pass
+            
             print(f"Downloading {self.llmModelName}...")
             
             # Download tokenizer
@@ -155,8 +168,8 @@ class ModelDownloader:
             from transformers import AutoTokenizer, AutoModelForCausalLM
             
             # Try to load the model
-            tokenizer = AutoTokenizer.from_pretrained(self.llmModelName)
-            model = AutoModelForCausalLM.from_pretrained(self.llmModelName)
+            tokenizer = AutoTokenizer.from_pretrained(self.llmModelName, local_files_only=True)
+            model = AutoModelForCausalLM.from_pretrained(self.llmModelName, local_files_only=True)
             
             print("✅ LLM model is available and working!")
             return True
