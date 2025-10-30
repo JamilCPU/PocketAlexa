@@ -66,7 +66,8 @@ class Autocorrect:
             print(response)
             # Extract the corrected command from the response
             correctedCommand = self._extractCommandFromResponse(response, originalCommand)
-            
+            print('corrected command:')
+            print(correctedCommand)
             return correctedCommand
             
         except Exception as e:
@@ -93,12 +94,13 @@ class Autocorrect:
         """Validate and construct open command with detected application name"""
         # Get detected application names
         appNames = [app[0] for app in self.appRegistry.apps]  # app[0] is the application name
-        print(response)
-        print(originalCommand)
-        print('validating open command')
+        openCmd = originalCommand[5:]
+
         # Look for application names in the response
         for appName in appNames:
-            if appName in originalCommand:
+            print(appName.lower())
+            if appName.lower() in openCmd:
+                print("Command Validated Succesfully")
                 return f"open {appName.lower()}"
         
         return "ERROR validating open command"
