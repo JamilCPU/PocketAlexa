@@ -194,7 +194,7 @@ class ModelDownloader:
         print(f"LLM Model: {' Ready' if llmSuccess else ' Failed'}")
         
         if voskSuccess and llmSuccess:
-            print("n🎉 All models ready! Autocorrect with LLM is available.")
+            print("All models ready! Autocorrect with LLM is available.")
         elif voskSuccess:
             print("Vosk ready, but LLM failed. Autocorrect will use fallback mode.")
         else:
