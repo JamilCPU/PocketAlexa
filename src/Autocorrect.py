@@ -52,6 +52,7 @@ class Autocorrect:
     def _llmCorrect(self, prompt, originalCommand):
         """Use optimized LLM to correct the command"""
         print('llmcorrect')
+        print(prompt)
         try:
             # Generate response using optimized model
             response = self.modelOptimizer.generateOptimized(
