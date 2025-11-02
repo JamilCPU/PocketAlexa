@@ -34,7 +34,8 @@ async def handle_client(websocket):
                 
                 # Apply autocorrect to the message
                 correctedMessage = autocorrect.correctCommand(message)
-                file.writeToFile("Autocorrected Message: '" + correctedMessage + "'")
+                print(correctedMessage)
+                file.writeToFile("Autocorrected Message: '" + correctedMessage['command'] + "'")
                 
                 result = execute.executeCommand(correctedMessage)
                 file.writeToFile("Response from EXECUTOR: '" + result + "'")

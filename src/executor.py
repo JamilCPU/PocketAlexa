@@ -6,33 +6,35 @@ import os
 import subprocess
 
 class Executor:    
-    def executeCommand(self, command):
-        commands = {'open notepad' : self.openNotepad,
+    def executeCommand(self, execution):
+        commands = {
         'lock screen' : self.lockScreen,
         'play media' : self.playPauseMedia,
         'pause media' : self.playPauseMedia}
-             
-        if "open " in command:
-            return self.openApplicationByName(command)
+    
+        executionCmd = execution['command']
 
-        if command not in commands:
-            return "EXECUTION ERROR: 404 Command Not Found: '", command, "'"
+        if "open " in executionCmd:
+            return self.openApplicationByName(execution)
 
-        print("Executing command... '", command, "'")
+        if executionCmd not in commands:
+            return "EXECUTION ERROR: 404 Command Not Found: '", executionCmd, "'"
+
+        print("Executing command... '", executionCmd, "'")
         
         print('EXECUTING STANDARD COMMAND')
-        return commands[command]()
+        return commands[executionCmd]()
 
-    def openApplicationByName(self, command):
-        print(command)
-        application = command[5:]
+    def openApplicationByName(self, execution):
+        print(execution)
+        application = execution['command'][5:]
+        path = execution['path']
+        print(path)
         print(application)
-        subprocess.Popen(application)
+        if not path:
+            return "ERROR: Application Path not Listed"
+        os.startfile(path)
         return "SUCCESS: Opened " + application
-
-    def openNotepad(self):
-        subprocess.Popen('notepad')
-        return "SUCCESS: Opened Notepad"
     
     def lockScreen(self):
         ctypes.windll.user32.LockWorkStation()

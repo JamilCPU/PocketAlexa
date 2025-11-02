@@ -16,4 +16,5 @@ Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*,
         }} |
     Where-Object { $_.Executable } |
     Sort-Object DisplayName |
-    Format-Table -AutoSize
+    Format-List DisplayName, Executable
+    Out-String -Width 4096

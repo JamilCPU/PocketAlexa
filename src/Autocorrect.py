@@ -84,26 +84,44 @@ class Autocorrect:
             if cmd.lower() in response.lower():
                 # If it's an "open" command, validate against detected applications
                 if cmd.startswith('open') and '<application_name>' in cmd:
+                    print('ran open validate cmd')
                     return self._validateOpenCommand(response, originalCommand)
-                return cmd
+                return {"command": cmd}
         
         # If no match found, return original command
-        return originalCommand
+        return {"command": originalCommand}
     
+    def _findAppInCommand(self, searchText, debug=False):
+        """Find matching application in the given text and return command dict"""
+        searchTextLower = searchText.lower()
+        for app in self.appRegistry.apps:
+            appName = app[0].lower()
+            if debug:
+                print('checking ', appName)
+            if appName in searchTextLower:
+                if debug:
+                    print("Command Validated Succesfully")
+                resp = {
+                    "command": f"open {appName}",
+                    "path": app[1]
+                }
+                if debug:
+                    print(resp)
+                return resp
+        return None
+
     def _validateOpenCommand(self, response, originalCommand):
         """Validate and construct open command with detected application name"""
         # Get detected application names
-        appNames = [app[0] for app in self.appRegistry.apps]  # app[0] is the application name
+        print('originalCommand: ', originalCommand)
         openCmd = originalCommand[5:]
-
-        # Look for application names in the response
-        for appName in appNames:
-            print(appName.lower())
-            if appName.lower() in openCmd:
-                print("Command Validated Succesfully")
-                return f"open {appName.lower()}"
         
-        return "ERROR validating open command"
+        # Look for application names in the command
+        result = self._findAppInCommand(openCmd, debug=True)
+        if result:
+            return result
+        
+        return {"command": "ERROR validating open command"}
     
     def _fallbackCorrect(self, command):
         """Fallback rule-based correction when LLM is not available"""
@@ -113,28 +131,27 @@ class Autocorrect:
         # Check for open commands with application names
         if any(word in commandLower for word in ['open', 'launch', 'start', 'run']):
             # Look for specific application names
-            appNames = [app[0].lower() for app in self.appRegistry.apps]
-            for appName in appNames:
-                if appName in commandLower:
-                    return f'open {appName}'
+            result = self._findAppInCommand(commandLower)
+            if result:
+                return result
             
             # Fallback to generic application commands
             if any(word in commandLower for word in ['notepad', 'text', 'editor']):
-                return 'open notepad'
+                return {"command": 'open notepad'}
             elif any(word in commandLower for word in ['calculator', 'calc']):
-                return 'open calculator'
+                return {"command": 'open calculator'}
             elif any(word in commandLower for word in ['browser', 'chrome', 'firefox', 'edge']):
-                return 'open browser'
+                return {"command": 'open browser'}
             else:
-                return 'open <application_name>'
+                return {"command": 'open <application_name>'}
         
         # Other command types
         elif any(word in commandLower for word in ['lock', 'screen', 'secure']):
-            return 'lock screen'
+            return {"command": 'lock screen'}
         elif any(word in commandLower for word in ['play', 'music', 'video', 'resume']):
-            return 'play media'
+            return {"command": 'play media'}
         elif any(word in commandLower for word in ['pause', 'stop', 'halt']):
-            return 'pause media'
+            return {"command": 'pause media'}
         
-        return command
+        return {"command": command}
     
