@@ -1,13 +1,46 @@
 import subprocess
 import os
+import json
 
 
 class ApplicationRegistry:
     def __init__(self):
         self.apps = []
+        currentDirectory = os.path.dirname(os.path.abspath(__file__))
+        self.cacheFilePath = os.path.join(currentDirectory, "..", "applications_cache.json")
+        self.cacheFilePath = os.path.abspath(self.cacheFilePath)
         self.detectInstalledApplications()
 
     def detectInstalledApplications(self):
+        if os.path.exists(self.cacheFilePath):
+            self.loadApplicationsFromFile(self.cacheFilePath)
+        else:
+            self.runPowerShellDetection()
+    
+    def loadApplicationsFromFile(self, filePath):
+        """Load applications from cached JSON file"""
+        try:
+            with open(filePath, 'r', encoding='utf-8') as f:
+                self.apps = json.load(f)
+            print(f"Loaded {len(self.apps)} applications from cache")
+        except Exception as e:
+            print(f"Error loading applications from cache: {e}")
+            print("Falling back to PowerShell detection...")
+            self.runPowerShellDetection()
+    
+    def saveApplicationsToFile(self, filePath=None):
+        """Save applications to JSON cache file"""
+        if filePath is None:
+            filePath = self.cacheFilePath
+        try:
+            with open(filePath, 'w', encoding='utf-8') as f:
+                json.dump(self.apps, f, indent=2, ensure_ascii=False)
+            print(f"Saved {len(self.apps)} applications to cache")
+        except Exception as e:
+            print(f"Error saving applications to cache: {e}")
+    
+    def runPowerShellDetection(self):
+        """Run PowerShell script to detect applications and save to cache"""
         currentDirectory = os.path.dirname(os.path.abspath(__file__))
         scriptPath = os.path.join(
             currentDirectory, "..", "Scripts", "DetectApplications.ps1"
@@ -19,6 +52,7 @@ class ApplicationRegistry:
         )
         if response:
             self.recordInstalledApplications(response.stdout)
+            self.saveApplicationsToFile()
         else:
             print("failed to detect installed applications..?")
 

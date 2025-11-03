@@ -166,6 +166,7 @@ class UserInterface:
                     
                     if 0 <= appIndex < len(self.app_registry.apps):
                         self.app_registry.apps[appIndex][appsColIndex] = newValue
+                        self.app_registry.saveApplicationsToFile()
                         print(f"Updated appRegistry.apps[{appIndex}][{appsColIndex}] to: {newValue}")
                 except Exception as e:
                     print(f"Error saving edit: {e}")
