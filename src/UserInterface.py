@@ -52,7 +52,16 @@ class UserInterface:
         parent.columnconfigure(0, weight=1)
         parent.rowconfigure(0, weight=1)
         tableFrame.columnconfigure(0, weight=1)
-        tableFrame.rowconfigure(0, weight=1)
+        tableFrame.rowconfigure(1, weight=1)
+        
+        # Add button frame above the table headers
+        buttonFrame = ttk.Frame(tableFrame)
+        buttonFrame.grid(row=0, column=0, sticky=(tk.W, tk.E), padx=0, pady=(0, 5))
+        
+        # Add + button positioned above Application and Path headers
+        # Position it at column 1 (after Row# column) to align with Application header
+        addButton = ttk.Button(buttonFrame, text="+", command=self.showAddApplicationDialog, width=3)
+        addButton.grid(row=0, column=1, padx=(50, 0), sticky=tk.W)
         
         columns = ('Row#', 'Application', 'Path')
         self.appTree = ttk.Treeview(tableFrame, columns=columns, show='headings', height=20)
@@ -70,8 +79,8 @@ class UserInterface:
         scrollbar = ttk.Scrollbar(tableFrame, orient=tk.VERTICAL, command=self.appTree.yview)
         self.appTree.configure(yscrollcommand=scrollbar.set)
         
-        self.appTree.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
-        scrollbar.grid(row=0, column=1, sticky=(tk.N, tk.S))
+        self.appTree.grid(row=1, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+        scrollbar.grid(row=1, column=1, sticky=(tk.N, tk.S))
         
         self.tableFrame = tableFrame
         
@@ -189,6 +198,72 @@ class UserInterface:
     def run(self):
         """Start the UI mainloop"""
         self.root.mainloop()
+    
+    def showAddApplicationDialog(self):
+        """Show a popup dialog to add a new application"""
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Add Application")
+        dialog.geometry("400x150")
+        dialog.transient(self.root)
+        dialog.grab_set()
+        
+        # Center the dialog on the parent window
+        dialog.update_idletasks()
+        x = (dialog.winfo_screenwidth() // 2) - (dialog.winfo_width() // 2)
+        y = (dialog.winfo_screenheight() // 2) - (dialog.winfo_height() // 2)
+        dialog.geometry(f"+{x}+{y}")
+        
+        # Application name field
+        ttk.Label(dialog, text="Application:").grid(row=0, column=0, padx=10, pady=10, sticky=tk.W)
+        appEntry = ttk.Entry(dialog, width=40)
+        appEntry.grid(row=0, column=1, padx=10, pady=10, sticky=(tk.W, tk.E))
+        appEntry.focus()
+        
+        # Path field
+        ttk.Label(dialog, text="Path:").grid(row=1, column=0, padx=10, pady=10, sticky=tk.W)
+        pathEntry = ttk.Entry(dialog, width=40)
+        pathEntry.grid(row=1, column=1, padx=10, pady=10, sticky=(tk.W, tk.E))
+        
+        dialog.columnconfigure(1, weight=1)
+        
+        def confirm():
+            """Handle confirm button click"""
+            appName = appEntry.get().strip()
+            appPath = pathEntry.get().strip()
+            
+            if not appName or not appPath:
+                return
+            
+            # Add to appRegistry
+            self.app_registry.apps.append([appName, appPath])
+            
+            # Save to cache
+            self.app_registry.saveApplicationsToFile()
+            
+            # Refresh the table
+            self.populateApplications()
+            
+            # Close dialog
+            dialog.destroy()
+        
+        def cancel():
+            """Handle cancel button click"""
+            dialog.destroy()
+        
+        # Buttons
+        buttonFrame = ttk.Frame(dialog)
+        buttonFrame.grid(row=2, column=0, columnspan=2, pady=10)
+        
+        confirmButton = ttk.Button(buttonFrame, text="Confirm", command=confirm)
+        confirmButton.pack(side=tk.LEFT, padx=5)
+        
+        cancelButton = ttk.Button(buttonFrame, text="Cancel", command=cancel)
+        cancelButton.pack(side=tk.LEFT, padx=5)
+        
+        # Bind Enter key to confirm
+        appEntry.bind('<Return>', lambda e: confirm())
+        pathEntry.bind('<Return>', lambda e: confirm())
+        dialog.bind('<Escape>', lambda e: cancel())
     
     def close(self):
         """Close the UI window"""
