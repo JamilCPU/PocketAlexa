@@ -75,7 +75,6 @@ class Autocorrect:
     
     def _extractCommandFromResponse(self, response, originalCommand):
         """Extract the corrected command from LLM response"""
-        # Look for the corrected command in the response
         availableCommands = self.commandRegistry.getAvailableCommands()
         
         # Check if any available command appears in the response
@@ -129,12 +128,10 @@ class Autocorrect:
         
         # Check for open commands with application names
         if any(word in commandLower for word in ['open', 'launch', 'start', 'run']):
-            # Look for specific application names
             result = self._findAppInCommand(commandLower)
             if result:
                 return result
             
-            # Fallback to generic application commands
             if any(word in commandLower for word in ['notepad', 'text', 'editor']):
                 return {"command": 'open notepad'}
             elif any(word in commandLower for word in ['calculator', 'calc']):
