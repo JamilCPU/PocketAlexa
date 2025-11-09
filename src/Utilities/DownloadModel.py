@@ -171,7 +171,7 @@ class ModelDownloader:
             tokenizer = AutoTokenizer.from_pretrained(self.llmModelName, local_files_only=True)
             model = AutoModelForCausalLM.from_pretrained(self.llmModelName, local_files_only=True)
             
-            print("✅ LLM model is available and working!")
+            print("LLM model is available and working!")
             return True
             
         except Exception as e:
@@ -198,7 +198,7 @@ class ModelDownloader:
         elif voskSuccess:
             print("Vosk ready, but LLM failed. Autocorrect will use fallback mode.")
         else:
-            print("❌ Model setup failed.")
+            print(" Model setup failed.")
         
         return voskSuccess, llmSuccess
 
@@ -207,7 +207,7 @@ class ModelDownloader:
         modelPath = downloader.downloadVoskModel()
     
         if modelPath:
-            print(f"✅ Vosk model setup complete!")
-            print(f"📁 Model location: {modelPath}")
+            print(f"Vosk model setup complete!")
+            print(f"Model location: {modelPath}")
         else:
-            print("❌ Failed to download model")
+            print("Failed to download model")
